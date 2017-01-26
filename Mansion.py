@@ -1,21 +1,29 @@
 import random
+import emoji
 
 
 class Mansion:
+    """
+    A big mansion, with a penthouse, a pool, a big garage.
+    Note that the place may be dusty, and some objects can be found on the floor.
+    But don't worry. Robot.py is here to handle that.
+    """
     EMPTY = '·'
-    DUST = 'd'
-    JEWEL = 'j'
+    DUST = ':hankey:'
+    JEWEL = ':ring:'
     board = []
 
     def __init__(self, w=random.randint(8, 16), h=random.randint(8, 16)):
         """Create a new mansion"""
+
+        self.w = w
+        self.h = h
         self.board = [[self.EMPTY for x in range(w)] for y in range(h)]
         self.populate()
 
     def populate(self):
         """Populate the mansion with jewel and dust"""
         lines = range(len(self.board))
-
         for line in lines:
             cases = range(len(self.board[line]))
 
@@ -31,12 +39,5 @@ class Mansion:
                     else:
                         self.board[line][case] = self.EMPTY
 
-    def print_mansion(self):
-        """Display the mansion in the terminal"""
-        for i in range(len(self.board)):
-            line_text = ''
-
-            for j in range(len(self.board[i])):
-                line_text += " " + self.board[i][j]
-
-            print(line_text + '\n')
+    def get_mansion_dimensions(self):
+        return {'width': len(self.board), 'height': len(self.board[0])}
