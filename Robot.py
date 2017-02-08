@@ -24,7 +24,7 @@ class Robot:
     cleaned_dust = 0
     stored_jewels = 0
     cycles = 0
-    energy = 0
+    energy = 1
     targets = []
     moves = []
 
@@ -139,6 +139,9 @@ class Robot:
         if has_moved:
             self.energy += 1
 
+    def get_ratio(self):
+        return ((self.cycles / (self.energy + (self.cleaned_dust + self.stored_jewels) * 2)) * 2) - 1
+
     def print_environment(self):
         """Display the mansion in the terminal"""
 
@@ -150,6 +153,7 @@ class Robot:
         print('>> Jewels : ' + str(self.stored_jewels) + '\n')
         print('>> Cycles : ' + str(self.cycles) + '\n')
         print('>> Energy : ' + str(self.energy) + '\n')
+        print('>> Efficienty : ' + str(self.get_ratio()) + '\n')
 
         for i in range(len(board)):
             line_text = ''
