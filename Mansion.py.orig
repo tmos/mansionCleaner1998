@@ -26,8 +26,14 @@ class Mansion:
             cases = range(len(self.board[line]))
 
             for case in cases:
+<<<<<<< HEAD
                 if self.board[line][case] is constants.EMPTY:
+                    tmp_rand = random.randint(0, 1000)
+                    "18/20 chances to be empty"
+=======
+                if self.board[line][case] is objects.EMPTY:
                     tmp_rand = random.randint(0, max_chances)
+>>>>>>> 46c6514b8e816445a616bcf9ad13611c48586313
 
                     if tmp_rand == 0:
                         self.board[line][case] = constants.DUST

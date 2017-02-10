@@ -32,17 +32,16 @@ class Game:
         self.mansion = Mansion.Mansion()
 
     "Robot"
+    def create_new_robot(self, mansion):
+        self.robot = Robot.Robot(mansion)
+        return self.robot
+
     def get_robot(self):
         if not self.robot:
             if not self.mansion:
                 self.create_new_mansion()
             self.create_new_robot(self.mansion)
 
-        return self.robot
-
-    def create_new_robot(self, mansion):
-        """@todo: retourner le nouveau robot"""
-        self.robot = Robot.Robot(mansion)
         return self.robot
 
     def start_robot(self):
