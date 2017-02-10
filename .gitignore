@@ -90,3 +90,7 @@ ENV/
 
 .idea
 .DS_Store
+
+bin/
+include/
+pip-selfcheck.json
