@@ -19,7 +19,7 @@ class Robot:
     """
     score = 0
     mansion = None
-    position = {'x': 0, 'y': 0}
+    position = {'x': -1, 'y': -1}
     current_cell = ''
     cleaned_dust = 0
     stored_jewels = 0

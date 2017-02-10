@@ -18,7 +18,7 @@ class Mansion:
         self.h = h
         self.board = [[objects.EMPTY for x in range(w)] for y in range(h)]
 
-    def populate(self):
+    def populate(self, max_chances=1000):
         """Populate the mansion with jewel and dust"""
         lines = range(len(self.board))
         for line in lines:
@@ -26,8 +26,7 @@ class Mansion:
 
             for case in cases:
                 if self.board[line][case] is objects.EMPTY:
-                    tmp_rand = random.randint(0, 1000)
-                    "18/20 chances to be empty"
+                    tmp_rand = random.randint(0, max_chances)
 
                     if tmp_rand == 0:
                         self.board[line][case] = objects.DUST
