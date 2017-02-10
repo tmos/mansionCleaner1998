@@ -17,7 +17,6 @@ class Mansion:
         self.w = w
         self.h = h
         self.board = [[objects.EMPTY for x in range(w)] for y in range(h)]
-        """self.populate()"""
 
     def populate(self):
         """Populate the mansion with jewel and dust"""

@@ -47,8 +47,7 @@ def main():
     "Display the mansion"
     mansion = game.get_current_mansion()
     "Create the worker"
-    game.create_new_robot(mansion)
-    robot = game.get_robot()
+    robot = game.create_new_robot(mansion)
     robot.print_environment()
     "Let's get to work !"
     game.start_robot()

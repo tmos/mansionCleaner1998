@@ -26,7 +26,7 @@ class Robot:
     cycles = 0
     energy = 1
     targets = []
-    moves = []
+    path = []
 
     def __init__(self, mansion):
         """Hal's birthplace"""
@@ -86,15 +86,12 @@ class Robot:
 
     def think(self):
         """What are the most efficient moves ?"""
-        self.moves = []
-        """
-        Algo de chemin le plus optimisé
-        """
-        self.moves.append(DOWN)
+
+        def astar():
+            self.path.append({'moves': [], 'score': 1})
 
     def act(self):
         """Do what you need to do"""
-        self.move(self.moves.pop())
         self.clean()
 
     def clean(self):
@@ -153,7 +150,7 @@ class Robot:
         print('>> Jewels : ' + str(self.stored_jewels) + '\n')
         print('>> Cycles : ' + str(self.cycles) + '\n')
         print('>> Energy : ' + str(self.energy) + '\n')
-        print('>> Efficienty : ' + str(self.get_ratio()) + '\n')
+        print('>> Score : ' + str(self.get_ratio()) + '\n')
 
         for i in range(len(board)):
             line_text = ''

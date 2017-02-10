@@ -41,7 +41,9 @@ class Game:
         return self.robot
 
     def create_new_robot(self, mansion):
+        """@todo: retourner le nouveau robot"""
         self.robot = Robot.Robot(mansion)
+        return self.robot
 
     def start_robot(self):
         self.robot.live()
