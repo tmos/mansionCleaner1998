@@ -19,13 +19,13 @@ class Robot:
         as a domestic hoover. Less risky.
     """
     score = 0
-    mansion = None
-    position = {'x': -1, 'y': -1}
-    current_cell = ''
     cleaned_dust = 0
     stored_jewels = 0
     cycles = 0
     energy = 1
+    mansion = None
+    position = {'x': -1, 'y': -1}
+    current_cell = ''
     targets = []
     path = []
 
@@ -238,14 +238,16 @@ class Robot:
 
     def clean(self):
         """Effecteur. Another one bytes the dust !"""
-
+        """@todo : score is not increasing"""
         if self.current_cell is not constants.EMPTY:
+
             if self.current_cell is constants.DUST:
                 self.cleaned_dust += 1
 
             if self.current_cell is constants.JEWEL:
                 self.stored_jewels += 1
 
+            self.score += 1
             self.mansion.board[self.position['x']][self.position['y']] = constants.EMPTY
 
     def move(self, direction):

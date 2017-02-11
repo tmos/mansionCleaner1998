@@ -13,15 +13,28 @@ def test_init():
 def test_look_for_new_targets():
     robot = Robot.Robot(Mansion.Mansion())
     assert robot.look_for_new_targets() is None
-    robot.mansion.populate(2)
+    robot.mansion.populate(1)
     assert type(robot.look_for_new_targets()) is list
 
 
 def test_clean():
     robot = Robot.Robot(Mansion.Mansion())
     robot.mansion.populate(1)
+    cell = robot.get_current_cell()
+
     assert robot.get_current_cell() is not constants.EMPTY
+    assert robot.cleaned_dust == 0
+    assert robot.stored_jewels == 0
+    assert robot.score == 0
+
     robot.clean()
+
+    if cell is constants.DUST:
+        assert robot.cleaned_dust == 1
+    elif cell is constants.DUST:
+        assert robot.stored_jewels == 1
+
+    assert robot.score == 1
     assert robot.get_current_cell() is constants.EMPTY
 
 
