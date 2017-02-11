@@ -41,14 +41,13 @@ def intro():
     os.system('clear')
 
 def main():
-    intro()
+    """intro()"""
     "Create a new game"
     game = Game.Game()
     "Display the mansion"
     mansion = game.get_current_mansion()
     "Create the worker"
-    robot = game.create_new_robot(mansion)
-    robot.print_environment()
+    game.create_new_robot(mansion)
     "Let's get to work !"
     game.start_robot()
 

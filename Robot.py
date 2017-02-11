@@ -42,31 +42,14 @@ class Robot:
             self.mansion.populate()
             self.current_cell = self.mansion.board[self.position['x']][self.position['y']]
 
-            """BEGIN Temporary"""
-            tmp = random.randint(0, 4)
-            if tmp == 0:
-                self.move(UP)
-            elif tmp == 1:
-                self.move(DOWN)
-            elif tmp == 2:
-                self.move(LEFT)
-            elif tmp == 3:
-                self.move(RIGHT)
-            else:
-                """freeze !"""
-            self.clean()
-            """END Temporary"""
-
-            """
             if self.look_for_new_targets() is not None:
                 self.think()
-                self.act()
-            """
+
+            self.act()
 
             self.print_environment()
             self.cycles += 1
-            time.sleep(.075)
-            """go = None"""
+            time.sleep(.75)
 
     def look_for_new_targets(self):
         """Capteur"""
@@ -88,8 +71,8 @@ class Robot:
     def think(self):
         """What are the most efficient moves ?"""
 
-        def find_move():
-            start = Node.Node(self.position['x'], self.position['y'], None)
+        def find_move(robot):
+            start = Node.Node(robot.position['x'], robot.position['y'], robot.current_cell)
             goals = find_goals()
 
             "Set of all A*'s best paths"
@@ -109,7 +92,7 @@ class Robot:
                     best_g_score = path[-1].g_score
 
             "@todo savoir sous quel format on retourne le chemin, l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction"
-            self.path = convert_path_to_move(best_path, best_g_score)
+            robot.path = convert_path_to_move(best_path, best_g_score)
             "self.path.append({'moves': [], 'score': 1})"
 
         def find_goals():
@@ -230,10 +213,12 @@ class Robot:
             return neighbors
 
         def best_f_node(node_set):
-            best_node = None
+            best_node = node_set[0]
+
             for node in node_set:
-                if node.f_score < best_node:
-                    best_node = node.f_score
+                if node.f_score < best_node.f_score:
+                    best_node = node
+
             return best_node
 
         def dist_between(current, node):
@@ -242,9 +227,14 @@ class Robot:
         def heuristic_cost_estimate(current, node):
             return dist_between(current, node) * constants.EMPTY_WEIGHT
 
+        find_move(self)
+
     def act(self):
         """Do what you need to do"""
-        self.clean()
+
+        if self.path:
+            self.move(self.path.pop(0))
+            self.clean()
 
     def clean(self):
         """Effecteur. Another one bytes the dust !"""
@@ -318,3 +308,6 @@ class Robot:
                 line_text += " "
 
             print(emoji.emojize(line_text, use_aliases=True) + '\n')
+
+        print("path : \n")
+        print (self.path)
