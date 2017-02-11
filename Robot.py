@@ -246,7 +246,7 @@ class Robot:
             if self.current_cell is constants.JEWEL:
                 self.stored_jewels += 1
 
-            self.mansion.board[self.position['x']][self.position['y']] = '·'
+            self.mansion.board[self.position['x']][self.position['y']] = constants.EMPTY
 
     def move(self, direction):
         """Déplacement"""
@@ -280,6 +280,9 @@ class Robot:
 
     def get_ratio(self):
         return ((self.cycles / (self.energy + (self.cleaned_dust + self.stored_jewels) * 2)) * 2) - 1
+
+    def get_current_cell(self):
+        return self.mansion.board[self.position['x']][self.position['y']]
 
     def print_environment(self):
         """Display the mansion in the terminal"""
