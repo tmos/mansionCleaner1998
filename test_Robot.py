@@ -26,4 +26,20 @@ def test_clean():
 
 
 def test_move():
-    assert True
+    robot = Robot.Robot(Mansion.Mansion())
+
+    robot.position = {'x': 2, 'y': 2}
+    robot.move(constants.UP)
+    assert robot.position == {'x': 1, 'y':  2}
+
+    robot.position = {'x': 2, 'y': 2}
+    robot.move(constants.DOWN)
+    assert robot.position == {'x': 3, 'y':  2}
+
+    robot.position = {'x': 2, 'y': 2}
+    robot.move(constants.LEFT)
+    assert robot.position == {'x': 2, 'y': 1}
+
+    robot.position = {'x': 2, 'y': 2}
+    robot.move(constants.RIGHT)
+    assert robot.position == {'x': 2, 'y': 3}

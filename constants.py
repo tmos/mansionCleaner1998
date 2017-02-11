@@ -2,6 +2,12 @@
 
 INFINITY = 99999
 
+"Robots moves"
+UP = 'UP'
+DOWN = 'DOWN'
+LEFT = 'LEFT'
+RIGHT = 'RIGHT'
+
 "Object values"
 DUST = ':hankey:'
 JEWEL = ':ring:'
