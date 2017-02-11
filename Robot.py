@@ -298,11 +298,11 @@ class Robot:
 
         os.system('clear')
 
-        print('>> Dust : ' + str(self.cleaned_dust) + '\n')
-        print('>> Jewels : ' + str(self.stored_jewels) + '\n')
-        print('>> Cycles : ' + str(self.cycles) + '\n')
-        print('>> Energy : ' + str(self.energy) + '\n')
-        print('>> Score : ' + str(self.get_ratio()) + '\n')
+        print(' ' + emoji.emojize(constants.DUST, use_aliases=True) + '  Dust : ' + str(self.cleaned_dust) + '\n')
+        print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) + '  Jewels : ' + str(self.stored_jewels) + '\n')
+        print(' ' + emoji.emojize(':arrows_clockwise:', use_aliases=True) + '  Cycles : ' + str(self.cycles) + '\n')
+        print(' ' + emoji.emojize(':battery:', use_aliases=True) + '  Energy : ' + str(self.energy) + '\n')
+        print(' ' + emoji.emojize(':heavy_check_mark:', use_aliases=True) + '  Score : ' + str(self.get_ratio()) + '\n')
 
         for i in range(len(board)):
             line_text = ''
