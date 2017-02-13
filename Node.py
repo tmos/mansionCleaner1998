@@ -36,7 +36,8 @@ class Node:
                 self.weight = constants.DUST_WEIGHT
             if cell is constants.JEWEL:
                 self.weight = constants.JEWEL_WEIGHT
-            # TODO add both weight
+            if cell is constants.BOTH:
+                self.weight = constants.BOTH_WEIGHT
         self.g_score = self.weight
         # TODO calcul de fscore ?
 

@@ -12,11 +12,15 @@ class Robot:
         Originally created for Discovery One ship, but finally used
         as a domestic hoover. Less risky.
     """
-    score = 0
+    score = 100
     cleaned_dust = 0
     stored_jewels = 0
+    lost_jewels = 0
     cycles = 0
-    spent_energy = 1
+
+    current_move = 0
+    available_moves = 10
+
     mansion = None
     position = {'x': -1, 'y': -1}
     current_cell = ''
@@ -35,15 +39,18 @@ class Robot:
         while go:
             self.mansion.populate()
 
-            if self.look_for_new_targets():
-                self.think()
-                #self.think_random()
+            if self.current_move < self.available_moves:
+                self.current_move += 1
+
+            if len(self.actions) is 0 or self.current_move == self.available_moves:
+                if self.look_for_new_targets():
+                    self.think()
+                self.current_move = 0
 
             self.act()
 
             # Utilities
             self.print_environment()
-            self.compute_score()
             self.cycles += 1
             time.sleep(0.25)
 
@@ -53,7 +60,7 @@ class Robot:
         board = self.mansion.board
         new_targets = []
 
-        self.spent_energy += 1
+        self.modify_score(-2)
 
         for i in range(len(board)):
             for j in range(len(board[i])):
@@ -65,20 +72,6 @@ class Robot:
             return new_targets
         else:
             return None
-
-    def think_random(self):
-        self.actions = []
-
-        for i in self.targets:
-            tmp = random.randint(0, 3)
-            if tmp == 0:
-                self.actions.append(constants.UP)
-            elif tmp == 1:
-                self.actions.append(constants.DOWN)
-            elif tmp == 2:
-                self.actions.append(constants.LEFT)
-            elif tmp == 3:
-                self.actions.append(constants.RIGHT)
 
     def think(self):
         """What are the most efficient moves ?"""
@@ -107,7 +100,7 @@ class Robot:
 
             # TODO savoir sous quel format on retourne le chemin,
             # l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction
-            robot.actions = convert_path_to_move(best_path, best_g_score)
+            return convert_path_to_move(best_path, best_g_score)
             # self.path.append({'moves': [], 'score': 1})"
 
         def find_goals(robot):
@@ -143,6 +136,9 @@ class Robot:
                 if self.mansion.board[node.y][node.x] is constants.JEWEL:
                     moves.append(constants.TAKE)
                 elif self.mansion.board[node.y][node.x] is constants.DUST:
+                    moves.append(constants.CLEAN)
+                elif self.mansion.board[node.y][node.x] is constants.BOTH:
+                    moves.append(constants.TAKE)
                     moves.append(constants.CLEAN)
 
             return moves
@@ -240,7 +236,13 @@ class Robot:
         def heuristic_cost_estimate(current, node):
             return dist_between(current, node) * constants.EMPTY_WEIGHT
 
-        find_move(self)
+        actions = find_move(self)
+        if self.score//10 > 0:
+            self.available_moves = self.score//10
+        else :
+            self.available_moves = 3
+
+        self.actions = actions[:self.available_moves]
 
     def act(self):
         """Do what you need to do"""
@@ -251,6 +253,8 @@ class Robot:
     def do_something(self, action):
         """Déplacement"""
 
+        got_something = False
+        got_wrong = False
         did_something = None
         current_cell = self.get_current_cell()
 
@@ -277,29 +281,40 @@ class Robot:
         elif action is constants.CLEAN:
             if current_cell is constants.DUST:
                 self.cleaned_dust += 1
-                self.score += 1
-            elif current_cell is constants.JEWEL:
-                self.score -= 1
+                got_something = True
+            elif current_cell is constants.JEWEL or current_cell is constants.BOTH:
+                self.lost_jewels += 1
+                got_wrong = True
             self.mansion.board[self.position['y']][self.position['x']] = constants.EMPTY
             did_something = True
 
         elif action is constants.TAKE:
             if current_cell is constants.JEWEL:
                 self.stored_jewels += 1
-                self.score += 1
-            elif current_cell is constants.DUST:
-                self.score -= 1
-            self.mansion.board[self.position['y']][self.position['x']] = constants.EMPTY
+                got_something = True
+                self.mansion.board[self.position['y']][self.position['x']] = constants.EMPTY
+            elif current_cell is constants.BOTH:
+                self.stored_jewels += 1
+                got_something = True
+                self.mansion.board[self.position['y']][self.position['x']] = constants.DUST
+
             did_something = True
 
-        if did_something:
-            self.spent_energy += 1
-
-    def compute_score(self):
-        self.score = self.stored_jewels + self.cleaned_dust / (self.cycles + 1)
+        if did_something:  # Energy
+            self.modify_score(-1)
+        if got_wrong:
+            self.modify_score(-100)
+        elif got_something:
+            self.modify_score(+20)
 
     def get_current_cell(self):
         return self.mansion.board[self.position['y']][self.position['x']]
+
+    def modify_score(self, value):
+        if self.score + value < 0:
+            self.score = 0
+        else:
+            self.score += value
 
     def print_environment(self):
         """Display the mansion in the terminal"""
@@ -310,10 +325,10 @@ class Robot:
 
         print(' ' + emoji.emojize(constants.DUST, use_aliases=True) + '  Dust : ' + str(self.cleaned_dust) + '\n')
         print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) + '  Jewels : ' + str(self.stored_jewels) + '\n')
+        print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) + '  Lost jewels : ' + str(self.lost_jewels) + '\n')
         print(' ' + emoji.emojize(':arrows_clockwise:', use_aliases=True) + '  Cycles : ' + str(self.cycles) + '\n')
-        print(' ' + emoji.emojize(':battery:', use_aliases=True) + '  Energy : ' + str(self.spent_energy) + '\n')
         print(' ' + emoji.emojize(':heavy_check_mark:', use_aliases=True) + '  Score : ' + str(self.score) + '\n')
-
+        print('  Tours : ' + str(self.current_move) + '/' + str(self.available_moves))
         for i in range(len(board)):
             line_text = ''
 

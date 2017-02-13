@@ -13,9 +13,11 @@ CLEAN = 'CLEAN'
 # Object values
 DUST = ':hankey:'
 JEWEL = ':ring:'
+BOTH = ':o:'
 EMPTY = '·'
 
 # Weight values
-DUST_WEIGHT = 1
-JEWEL_WEIGHT = 1
-EMPTY_WEIGHT = 50
+DUST_WEIGHT = 5
+JEWEL_WEIGHT = 5
+BOTH_WEIGHT = 1
+EMPTY_WEIGHT = 10
