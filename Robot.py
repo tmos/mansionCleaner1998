@@ -192,7 +192,7 @@ class Robot:
             total_path = [current]
             while current.came_from:
                 current = current.came_from
-                total_path.append(current)
+                total_path = [current] + total_path
             return total_path
 
         def neighbors_of(current):
