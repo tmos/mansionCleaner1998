@@ -45,7 +45,7 @@ class Robot:
             self.print_environment()
             self.compute_score()
             self.cycles += 1
-            time.sleep(.25)
+            time.sleep(0.25)
 
     def look_for_new_targets(self):
         """Capteur"""
@@ -255,23 +255,23 @@ class Robot:
         current_cell = self.get_current_cell()
 
         if action is constants.UP:
-            if self.position['x'] > 0:
-                self.position['x'] -= 1
+            if self.position['y'] > 0:
+                self.position['y'] -= 1
                 did_something = True
 
         elif action is constants.DOWN:
-            if self.position['x'] < self.mansion_dimensions['width'] - 1:
-                self.position['x'] += 1
-                did_something = True
-
-        elif action is constants.RIGHT:
             if self.position['y'] < self.mansion_dimensions['height'] - 1:
                 self.position['y'] += 1
                 did_something = True
 
+        elif action is constants.RIGHT:
+            if self.position['x'] < self.mansion_dimensions['width'] - 1:
+                self.position['x'] += 1
+                did_something = True
+
         elif action is constants.LEFT:
-            if self.position['y'] > 0:
-                self.position['y'] -= 1
+            if self.position['x'] > 0:
+                self.position['x'] -= 1
                 did_something = True
 
         elif action is constants.CLEAN:
@@ -280,7 +280,7 @@ class Robot:
                 self.score += 1
             elif current_cell is constants.JEWEL:
                 self.score -= 1
-            self.mansion.board[self.position['x']][self.position['y']] = constants.EMPTY
+            self.mansion.board[self.position['y']][self.position['x']] = constants.EMPTY
             did_something = True
 
         elif action is constants.TAKE:
@@ -289,7 +289,7 @@ class Robot:
                 self.score += 1
             elif current_cell is constants.DUST:
                 self.score -= 1
-            self.mansion.board[self.position['x']][self.position['y']] = constants.EMPTY
+            self.mansion.board[self.position['y']][self.position['x']] = constants.EMPTY
             did_something = True
 
         if did_something:
@@ -299,7 +299,7 @@ class Robot:
         self.score = self.stored_jewels + self.cleaned_dust / (self.cycles + 1)
 
     def get_current_cell(self):
-        return self.mansion.board[self.position['x']][self.position['y']]
+        return self.mansion.board[self.position['y']][self.position['x']]
 
     def print_environment(self):
         """Display the mansion in the terminal"""
