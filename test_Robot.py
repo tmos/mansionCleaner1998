@@ -27,11 +27,11 @@ def test_clean():
     assert robot.stored_jewels == 0
     assert robot.score == 0
 
-    robot.do_something(constants.CLEAN)
-
     if cell is constants.DUST:
+        robot.do_something(constants.CLEAN)
         assert robot.cleaned_dust == 1
-    elif cell is constants.DUST:
+    elif cell is constants.JEWEL:
+        robot.do_something(constants.TAKE)
         assert robot.stored_jewels == 1
 
     assert robot.score == 1
@@ -43,16 +43,16 @@ def test_move():
 
     robot.position = {'x': 2, 'y': 2}
     robot.do_something(constants.UP)
-    assert robot.position == {'x': 1, 'y':  2}
+    assert robot.position == {'x': 2, 'y':  1}
 
     robot.position = {'x': 2, 'y': 2}
     robot.do_something(constants.DOWN)
-    assert robot.position == {'x': 3, 'y':  2}
+    assert robot.position == {'x': 2, 'y':  3}
 
     robot.position = {'x': 2, 'y': 2}
     robot.do_something(constants.LEFT)
-    assert robot.position == {'x': 2, 'y': 1}
+    assert robot.position == {'x': 1, 'y': 2}
 
     robot.position = {'x': 2, 'y': 2}
     robot.do_something(constants.RIGHT)
-    assert robot.position == {'x': 2, 'y': 3}
+    assert robot.position == {'x': 3, 'y': 2}
