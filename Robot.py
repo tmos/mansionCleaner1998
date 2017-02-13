@@ -52,7 +52,7 @@ class Robot:
             # Utilities
             self.print_environment()
             self.cycles += 1
-            time.sleep(0.25)
+            time.sleep(0.025)
 
     def look_for_new_targets(self):
         """Capteur"""
@@ -88,19 +88,21 @@ class Robot:
                 path_set.append(a_star(start, goal))
 
             best_path = []
-            best_g_score = 0
+            g_score = 0
+            max_len = 0
             for path in path_set:
                 # Save the best path : the one with the lowest goal's g_score
                 # TODO modifier les constantes pour que le g_score d'un chemin long
                 # avec que des objets tout le long soit meilleur qu'un chemin beaucoup
                 # plus court mais avec qu'un objet
-                if path[-1].g_score > best_g_score:
+                if (len(path) > max_len) or (len(path) == max_len and path[-1].g_score < g_score):
                     best_path = path
-                    best_g_score = path[-1].g_score
+                    max_len = len(path)
+                    g_score = path[-1].g_score
 
             # TODO savoir sous quel format on retourne le chemin,
             # l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction
-            return convert_path_to_move(best_path, best_g_score)
+            return convert_path_to_move(best_path)
             # self.path.append({'moves': [], 'score': 1})"
 
         def find_goals(robot):
@@ -111,7 +113,7 @@ class Robot:
                 goals.append(Node.Node(target[1], target[0], robot.mansion.board[target[1]][target[0]]))
             return goals
 
-        def convert_path_to_move(path, score):
+        def convert_path_to_move(path):
             """Convert a node path to a move path"""
             moves = []
             prev_x = path[0].x
@@ -305,7 +307,7 @@ class Robot:
         if got_wrong:
             self.modify_score(-100)
         elif got_something:
-            self.modify_score(+20)
+            self.modify_score(+10)
 
     def get_current_cell(self):
         return self.mansion.board[self.position['y']][self.position['x']]

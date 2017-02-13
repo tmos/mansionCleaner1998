@@ -12,14 +12,14 @@ class Mansion:
 
     board = []
 
-    def __init__(self, w=10, h=10):
+    def __init__(self, w=5, h=5):
         """Create a new mansion"""
 
         self.w = w
         self.h = h
         self.board = [[constants.EMPTY for x in range(w)] for y in range(h)]
 
-    def populate(self, max_chances=400):
+    def populate(self, max_chances=50):
         """Populate the mansion with jewel and dust"""
         lines = range(len(self.board))
         for line in lines:
