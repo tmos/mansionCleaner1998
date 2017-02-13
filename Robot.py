@@ -89,16 +89,18 @@ class Robot:
 
             best_path = []
             g_score = 0
-            max_len = 0
+            max_elts = 0
             for path in path_set:
+                elements = path[0]
+                way = path[1]
                 # Save the best path : the one with the lowest goal's g_score
                 # TODO modifier les constantes pour que le g_score d'un chemin long
                 # avec que des objets tout le long soit meilleur qu'un chemin beaucoup
                 # plus court mais avec qu'un objet
-                if (len(path) > max_len) or (len(path) == max_len and path[-1].g_score < g_score):
-                    best_path = path
-                    max_len = len(path)
-                    g_score = path[-1].g_score
+                if (elements > max_elts) or (elements == max_elts and way[-1].g_score < g_score):
+                    best_path = way
+                    max_elts = elements
+                    g_score = way[-1].g_score
 
             # TODO savoir sous quel format on retourne le chemin,
             # l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction
@@ -197,11 +199,21 @@ class Robot:
 
         def reconstruct_path(current):
             """Return the path from the start node to the current node"""
+            if current.weight == constants.EMPTY_WEIGHT:
+                number_of_elts = 0
+            elif current.weight == constants.BOTH_WEIGHT:
+                number_of_elts = 2
+            elif (current.weight == constants.JEWEL_WEIGHT) or (current.weight == constants.DUST_WEIGHT):
+                number_of_elts = 1
             total_path = [current]
             while current.came_from:
                 current = current.came_from
                 total_path = [current] + total_path
-            return total_path
+                if current.weight == constants.BOTH_WEIGHT:
+                    number_of_elts += 2
+                elif (current.weight == constants.JEWEL_WEIGHT) or (current.weight == constants.DUST_WEIGHT):
+                    number_of_elts += 1
+            return [number_of_elts, total_path]
 
         def neighbors_of(current):
             """Return the list of neighbor nodes of the current node"""
