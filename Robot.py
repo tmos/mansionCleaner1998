@@ -35,8 +35,7 @@ class Robot:
         self.position['y'] = random.randint(0, self.mansion_dimensions['height'] - 1)
 
     def live(self):
-        go = True
-        while go:
+        while True:
             self.mansion.populate()
 
             if self.current_move < self.available_moves:
