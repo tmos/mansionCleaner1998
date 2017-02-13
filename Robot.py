@@ -22,7 +22,7 @@ class Robot:
     cleaned_dust = 0
     stored_jewels = 0
     cycles = 0
-    energy = 1
+    spent_energy = 1
     mansion = None
     position = {'x': -1, 'y': -1}
     current_cell = ''
@@ -39,8 +39,7 @@ class Robot:
     def live(self):
         go = True
         while go:
-            self.mansion.populate()
-            self.current_cell = self.mansion.board[self.position['x']][self.position['y']]
+            self.mansion.populate(50)
 
             if self.look_for_new_targets() is not None:
                 self.think()
@@ -49,22 +48,24 @@ class Robot:
 
             self.print_environment()
             self.cycles += 1
-            time.sleep(.75)
+            time.sleep(.025)
 
     def look_for_new_targets(self):
         """Capteur"""
 
         board = self.mansion.board
-        targets = []
+        new_targets = []
+
+        self.spent_energy += 1
 
         for i in range(len(board)):
             for j in range(len(board[i])):
                 if board[i][j] is not constants.EMPTY:
-                    targets.append([i, j])
+                    new_targets.append([i, j])
 
-        if self.targets != targets:
-            self.targets = targets
-            return targets
+        if self.targets != new_targets:
+            self.targets = new_targets
+            return new_targets
         else:
             return None
 
@@ -242,12 +243,12 @@ class Robot:
     def clean(self):
         """Effecteur. Another one bytes the dust !"""
         # TODO : score is not increasing
-        if self.current_cell is not constants.EMPTY:
+        current_cell = self.get_current_cell()
 
-            if self.current_cell is constants.DUST:
+        if current_cell is not constants.EMPTY:
+            if current_cell is constants.DUST:
                 self.cleaned_dust += 1
-
-            if self.current_cell is constants.JEWEL:
+            if current_cell is constants.JEWEL:
                 self.stored_jewels += 1
 
             self.score += 1
@@ -281,10 +282,10 @@ class Robot:
             "wtf"
 
         if has_moved:
-            self.energy += 1
+            self.spent_energy += 1
 
     def get_ratio(self):
-        return ((self.cycles / (self.energy + (self.cleaned_dust + self.stored_jewels) * 2)) * 2) - 1
+        return ((self.cycles / (self.spent_energy + (self.cleaned_dust + self.stored_jewels) * 2)) * 2) - 1
 
     def get_current_cell(self):
         return self.mansion.board[self.position['x']][self.position['y']]
@@ -299,7 +300,7 @@ class Robot:
         print(' ' + emoji.emojize(constants.DUST, use_aliases=True) + '  Dust : ' + str(self.cleaned_dust) + '\n')
         print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) + '  Jewels : ' + str(self.stored_jewels) + '\n')
         print(' ' + emoji.emojize(':arrows_clockwise:', use_aliases=True) + '  Cycles : ' + str(self.cycles) + '\n')
-        print(' ' + emoji.emojize(':battery:', use_aliases=True) + '  Energy : ' + str(self.energy) + '\n')
+        print(' ' + emoji.emojize(':battery:', use_aliases=True) + '  Energy : ' + str(self.spent_energy) + '\n')
         print(' ' + emoji.emojize(':heavy_check_mark:', use_aliases=True) + '  Score : ' + str(self.get_ratio()) + '\n')
 
         for i in range(len(board)):
@@ -318,4 +319,4 @@ class Robot:
             print(emoji.emojize(line_text, use_aliases=True) + '\n')
 
         print("path : \n")
-        print (self.path)
+        print(self.path)
