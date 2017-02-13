@@ -107,7 +107,7 @@ class Robot:
 
             # TODO savoir sous quel format on retourne le chemin,
             # l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction
-            robot.path = convert_path_to_move(best_path, best_g_score)
+            robot.actions = convert_path_to_move(best_path, best_g_score)
             # self.path.append({'moves': [], 'score': 1})"
 
         def find_goals():
