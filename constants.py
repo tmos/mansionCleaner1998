@@ -7,6 +7,8 @@ UP = 'UP'
 DOWN = 'DOWN'
 LEFT = 'LEFT'
 RIGHT = 'RIGHT'
+TAKE = 'TAKE'
+CLEAN = 'CLEAN'
 
 # Object values
 DUST = ':hankey:'

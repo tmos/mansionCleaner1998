@@ -5,12 +5,6 @@ import os
 import constants
 import Node
 
-UP = 'UP'
-DOWN = 'DOWN'
-LEFT = 'LEFT'
-RIGHT = 'RIGHT'
-
-
 class Robot:
     """
         Heuristically Programmed Algorithmic computer n°9000.
@@ -27,7 +21,7 @@ class Robot:
     position = {'x': -1, 'y': -1}
     current_cell = ''
     targets = []
-    path = []
+    actions = []
 
     def __init__(self, mansion):
         """Hal's birthplace"""
@@ -39,16 +33,19 @@ class Robot:
     def live(self):
         go = True
         while go:
-            self.mansion.populate(50)
+            self.mansion.populate()
 
-            if self.look_for_new_targets() is not None:
-                self.think()
+            if self.look_for_new_targets():
+                # self.think()
+                self.think_random()
 
             self.act()
 
+            # Utilities
             self.print_environment()
+            self.compute_score()
             self.cycles += 1
-            time.sleep(.025)
+            time.sleep(.25)
 
     def look_for_new_targets(self):
         """Capteur"""
@@ -68,6 +65,20 @@ class Robot:
             return new_targets
         else:
             return None
+
+    def think_random(self):
+        self.actions = []
+
+        for i in self.targets:
+            tmp = random.randint(0, 3)
+            if tmp == 0:
+                self.actions.append(constants.UP)
+            elif tmp == 1:
+                self.actions.append(constants.DOWN)
+            elif tmp == 2:
+                self.actions.append(constants.LEFT)
+            elif tmp == 3:
+                self.actions.append(constants.RIGHT)
 
     def think(self):
         """What are the most efficient moves ?"""
@@ -123,16 +134,16 @@ class Robot:
             for node in path:
                 if (node.x == prev_x + 1) and (node.y == prev_y):
                     prev_x = node.x
-                    moves.append(RIGHT)
+                    moves.append(constants.RIGHT)
                 elif (node.x == prev_x - 1) and (node.y == prev_y):
                     prev_x = node.x
-                    moves.append(LEFT)
+                    moves.append(constants.LEFT)
                 elif (node.x == prev_x) and (node.y == prev_y + 1):
                     prev_y = node.y
-                    moves.append(DOWN)
+                    moves.append(constants.DOWN)
                 elif (node.x == prev_x) and (node.y == prev_y - 1):
                     prev_y = node.y
-                    moves.append(UP)
+                    moves.append(constants.UP)
                 elif (node.x != prev_x) and (node.y != prev_y):
                     return False
 
@@ -236,56 +247,58 @@ class Robot:
     def act(self):
         """Do what you need to do"""
 
-        if self.path:
-            self.move(self.path.pop(0))
-            self.clean()
+        if self.actions:
+            self.do_something(self.actions.pop(0))
 
-    def clean(self):
-        """Effecteur. Another one bytes the dust !"""
-        # TODO : score is not increasing
-        current_cell = self.get_current_cell()
-
-        if current_cell is not constants.EMPTY:
-            if current_cell is constants.DUST:
-                self.cleaned_dust += 1
-            if current_cell is constants.JEWEL:
-                self.stored_jewels += 1
-
-            self.score += 1
-            self.mansion.board[self.position['x']][self.position['y']] = constants.EMPTY
-
-    def move(self, direction):
+    def do_something(self, action):
         """Déplacement"""
 
-        has_moved = None
+        did_something = None
+        current_cell = self.get_current_cell()
 
-        if direction is UP:
+        if action is constants.UP:
             if self.position['x'] > 0:
                 self.position['x'] -= 1
-                has_moved = True
+                did_something = True
 
-        elif direction is DOWN:
+        elif action is constants.DOWN:
             if self.position['x'] < self.mansion_dimensions['width'] - 1:
                 self.position['x'] += 1
-                has_moved = True
+                did_something = True
 
-        elif direction is RIGHT:
+        elif action is constants.RIGHT:
             if self.position['y'] < self.mansion_dimensions['height'] - 1:
                 self.position['y'] += 1
-                has_moved = True
+                did_something = True
 
-        elif direction is LEFT:
+        elif action is constants.LEFT:
             if self.position['y'] > 0:
                 self.position['y'] -= 1
-                has_moved = True
-        else:
-            "wtf"
+                did_something = True
 
-        if has_moved:
+        elif action is constants.CLEAN:
+            if current_cell is constants.DUST:
+                self.cleaned_dust += 1
+                self.score += 1
+            elif current_cell is constants.JEWEL:
+                self.score -= 1
+            self.mansion.board[self.position['x']][self.position['y']] = constants.EMPTY
+            did_something = True
+
+        elif action is constants.TAKE:
+            if current_cell is constants.JEWEL:
+                self.stored_jewels += 1
+                self.score += 1
+            elif current_cell is constants.DUST:
+                self.score -= 1
+            self.mansion.board[self.position['x']][self.position['y']] = constants.EMPTY
+            did_something = True
+
+        if did_something:
             self.spent_energy += 1
 
-    def get_ratio(self):
-        return ((self.cycles / (self.spent_energy + (self.cleaned_dust + self.stored_jewels) * 2)) * 2) - 1
+    def compute_score(self):
+        self.score = self.stored_jewels + self.cleaned_dust / (self.cycles + 1)
 
     def get_current_cell(self):
         return self.mansion.board[self.position['x']][self.position['y']]
@@ -301,7 +314,7 @@ class Robot:
         print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) + '  Jewels : ' + str(self.stored_jewels) + '\n')
         print(' ' + emoji.emojize(':arrows_clockwise:', use_aliases=True) + '  Cycles : ' + str(self.cycles) + '\n')
         print(' ' + emoji.emojize(':battery:', use_aliases=True) + '  Energy : ' + str(self.spent_energy) + '\n')
-        print(' ' + emoji.emojize(':heavy_check_mark:', use_aliases=True) + '  Score : ' + str(self.get_ratio()) + '\n')
+        print(' ' + emoji.emojize(':heavy_check_mark:', use_aliases=True) + '  Score : ' + str(self.score) + '\n')
 
         for i in range(len(board)):
             line_text = ''
@@ -319,4 +332,4 @@ class Robot:
             print(emoji.emojize(line_text, use_aliases=True) + '\n')
 
         print("path : \n")
-        print(self.path)
+        print(self.actions)
