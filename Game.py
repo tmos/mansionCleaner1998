@@ -10,7 +10,7 @@ class Game:
     mansion = None
     robot = None
 
-    "Game"
+    # Game
     def __init__(self):
         if not self.instance:
             self.instance = self
@@ -21,7 +21,7 @@ class Game:
 
         return self.instance
 
-    "Mansion"
+    # Mansion
     def get_current_mansion(self):
         if not self.mansion:
             self.create_new_mansion()
@@ -31,7 +31,7 @@ class Game:
     def create_new_mansion(self):
         self.mansion = Mansion.Mansion()
 
-    "Robot"
+    # Robot
     def create_new_robot(self, mansion):
         self.robot = Robot.Robot(mansion)
         return self.robot
