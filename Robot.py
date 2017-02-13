@@ -75,29 +75,32 @@ class Robot:
             start = Node.Node(robot.position['x'], robot.position['y'], robot.current_cell)
             goals = find_goals()
 
-            "Set of all A*'s best paths"
+            # Set of all A*'s best paths
             path_set = []
 
             for goal in goals:
-                "Do A* calculation for each goal"
+                # Do A* calculation for each goal
                 path_set.append(a_star(start, goal))
 
             best_path = []
             best_g_score = constants.INFINITY
             for path in path_set:
-                "Save the best path : the one with the lowest goal's g_score"
-                "@todo modifier les constantes pour que le g_score d'un chemin long avec que des objets tout le long soit meilleur qu'un chemin beaucoup plus court mais avec qu'un objet"
+                # Save the best path : the one with the lowest goal's g_score
+                # TODO modifier les constantes pour que le g_score d'un chemin long
+                # avec que des objets tout le long soit meilleur qu'un chemin beaucoup
+                # plus court mais avec qu'un objet
                 if path[-1].g_score < best_g_score:
                     best_path = path
                     best_g_score = path[-1].g_score
 
-            "@todo savoir sous quel format on retourne le chemin, l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction"
+            # TODO savoir sous quel format on retourne le chemin,
+            # l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction
             robot.path = convert_path_to_move(best_path, best_g_score)
-            "self.path.append({'moves': [], 'score': 1})"
+            # self.path.append({'moves': [], 'score': 1})"
 
         def find_goals():
             """Return every potential goals"""
-            "@todo"
+            # TODO
             goals = []
             mansion_dimensions = self.mansion.get_mansion_dimensions()
             x_size = mansion_dimensions['width']
@@ -105,7 +108,7 @@ class Robot:
             for x in range(0, x_size):
                 for y in range(0, y_size):
                     if (self.mansion.board[x][y] is constants.DUST) or (self.mansion.board[x][y] is constants.JEWEL):
-                        "@todo ajouter quand y a les deux"
+                        # TODO ajouter quand y a les deux
                         goals.append(Node.Node(x, y, self.mansion.board[x][y]))
             return goals
 
@@ -115,7 +118,7 @@ class Robot:
             prev_x = path[0].x
             prev_y = path[0].y
 
-            "@todo verifier les move"
+            # TODO verifier les moves
             for node in path:
                 if (node.x == prev_x + 1) and (node.y == prev_y):
                     prev_x = node.x
@@ -137,18 +140,18 @@ class Robot:
         def a_star(start, goal):
             """A* algorithm"""
 
-            "Start node f_score"
+            # Start node f_score
             start.f_score = heuristic_cost_estimate(start, goal)
 
-            "The set of node already evaluated"
+            # The set of node already evaluated
             closed_set = []
 
-            "The set of currently discovered nodes that are not evaluated yet"
+            # The set of currently discovered nodes that are not evaluated yet
             open_set = [start]
 
-            "While open_set is not empty"
+            # While open_set is not empty
             while open_set:
-                "Chose as current the node in open_set having the lowest f_score value"
+                # Chose as current the node in open_set having the lowest f_score value
                 current = best_f_node(open_set)
 
                 if current.equals(goal):
@@ -157,31 +160,31 @@ class Robot:
                 open_set.remove(current)
                 closed_set.append(current)
 
-                "Find the neighbor nodes of current"
+                # Find the neighbor nodes of current
                 neighbor_set = neighbors_of(current)
 
                 for neighbor in neighbor_set:
                     if neighbor in closed_set:
-                        "Ignore the neighbor which is already evaluated"
+                        # Ignore the neighbor which is already evaluated
                         continue
 
-                    "Distance from start to the neighbor"
+                    # Distance from start to the neighbor
                     tentative_g_score = current.g_score + neighbor.weight
-                    "tentative_g_score = current.g_score + dist_between(current, neighbor)"
+                    # tentative_g_score = current.g_score + dist_between(current, neighbor)
 
                     if neighbor not in open_set:
-                        "Hurray! We discovered a new node"
+                        # Hurray! We discovered a new node
                         open_set.append(neighbor)
                     elif tentative_g_score >= neighbor.g_score:
-                        "This is not a better path"
+                        # This is not a better path
                         continue
 
-                    "This path is the best!"
+                    # This path is the best!
                     neighbor.came_from = current
                     neighbor.g_score = tentative_g_score
                     neighbor.f_score = neighbor.g_score + heuristic_cost_estimate(neighbor, goal)
 
-            "Failure"
+            # Failure
             return False
 
         def reconstruct_path(current):
@@ -238,7 +241,7 @@ class Robot:
 
     def clean(self):
         """Effecteur. Another one bytes the dust !"""
-        """@todo : score is not increasing"""
+        # TODO : score is not increasing
         if self.current_cell is not constants.EMPTY:
 
             if self.current_cell is constants.DUST:

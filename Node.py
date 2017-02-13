@@ -28,7 +28,7 @@ class Node:
         self.x = x
         self.y = y
 
-        "Weight calculation"
+        # Weight calculation
         if cell is not None:
             if cell is constants.EMPTY:
                 self.weight = constants.EMPTY_WEIGHT
@@ -36,9 +36,9 @@ class Node:
                 self.weight = constants.DUST_WEIGHT
             if cell is constants.JEWEL:
                 self.weight = constants.JEWEL_WEIGHT
-            "@todo add both weight"
+            # TODO add both weight
 
-        "@todo calcul de g_score ou fscore ?"
+        # TODO calcul de g_score ou fscore ?
 
     def equals(self, node):
         return (self.x == node.x) and (self.y == node.y)
