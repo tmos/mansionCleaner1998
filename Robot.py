@@ -36,8 +36,8 @@ class Robot:
             self.mansion.populate()
 
             if self.look_for_new_targets():
-                # self.think()
-                self.think_random()
+                self.think()
+                #self.think_random()
 
             self.act()
 
@@ -147,9 +147,9 @@ class Robot:
                 elif (node.x != prev_x) and (node.y != prev_y):
                     return False
                 if self.mansion.board[node.x][node.y] is constants.JEWEL:
-                    moves.append(TAKE)
+                    moves.append(constants.TAKE)
                 elif self.mansion.board[node.x][node.y] is constants.DUST:
-                    moves.append(CLEAN)
+                    moves.append(constants.CLEAN)
 
             return moves
 
