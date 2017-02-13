@@ -84,7 +84,7 @@ class Robot:
         """What are the most efficient moves ?"""
 
         def find_move(robot):
-            start = Node.Node(robot.position['x'], robot.position['y'], robot.current_cell)
+            start = Node.Node(robot.position['x'], robot.position['y'], robot.get_current_cell())
             goals = find_goals()
 
             # Set of all A*'s best paths
@@ -146,6 +146,10 @@ class Robot:
                     moves.append(constants.UP)
                 elif (node.x != prev_x) and (node.y != prev_y):
                     return False
+                if self.mansion.board[node.x][node.y] is constants.JEWEL:
+                    moves.append(TAKE)
+                elif self.mansion.board[node.x][node.y] is constants.DUST:
+                    moves.append(CLEAN)
 
             return moves
 
@@ -176,7 +180,7 @@ class Robot:
                 neighbor_set = neighbors_of(current)
 
                 for neighbor in neighbor_set:
-                    if neighbor in closed_set:
+                    if neighbor.belongs_to(closed_set):  # if neighbor in closed_set:
                         # Ignore the neighbor which is already evaluated
                         continue
 
@@ -184,7 +188,7 @@ class Robot:
                     tentative_g_score = current.g_score + neighbor.weight
                     # tentative_g_score = current.g_score + dist_between(current, neighbor)
 
-                    if neighbor not in open_set:
+                    if not neighbor.belongs_to(open_set):  # if neighbor not in open_set:
                         # Hurray! We discovered a new node
                         open_set.append(neighbor)
                     elif tentative_g_score >= neighbor.g_score:
