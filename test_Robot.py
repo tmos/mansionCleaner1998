@@ -25,7 +25,7 @@ def test_clean():
     assert robot.get_current_cell() is not constants.EMPTY
     assert robot.cleaned_dust == 0
     assert robot.stored_jewels == 0
-    assert robot.score == 0
+    assert robot.score == 100
 
     if cell is constants.DUST:
         robot.do_something(constants.CLEAN)
@@ -34,7 +34,7 @@ def test_clean():
         robot.do_something(constants.TAKE)
         assert robot.stored_jewels == 1
 
-    assert robot.score == 1
+    assert robot.score == 109
     assert robot.get_current_cell() is constants.EMPTY
 
 
