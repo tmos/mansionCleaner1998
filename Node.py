@@ -37,8 +37,14 @@ class Node:
             if cell is constants.JEWEL:
                 self.weight = constants.JEWEL_WEIGHT
             # TODO add both weight
-
-        # TODO calcul de g_score ou fscore ?
+        self.g_score = self.weight
+        # TODO calcul de fscore ?
 
     def equals(self, node):
         return (self.x == node.x) and (self.y == node.y)
+
+    def belongs_to(self, nodes):
+        for node in nodes:
+            if (self.x == node.x) and (self.y == node.y):
+                return True
+        return False
