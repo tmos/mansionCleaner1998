@@ -16,7 +16,6 @@ JEWEL = ':ring:'
 EMPTY = '·'
 
 # Weight values
-DUST_WEIGHT = 1  # 2
-JEWEL_WEIGHT = 1  # 2
-BOTH_WEIGHT = 1
-EMPTY_WEIGHT = 1  # 4
+DUST_WEIGHT = 1
+JEWEL_WEIGHT = 1
+EMPTY_WEIGHT = 50

@@ -19,7 +19,7 @@ class Mansion:
         self.h = h
         self.board = [[constants.EMPTY for x in range(w)] for y in range(h)]
 
-    def populate(self, max_chances=500):
+    def populate(self, max_chances=250):
         """Populate the mansion with jewel and dust"""
         lines = range(len(self.board))
         for line in lines:

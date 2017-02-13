@@ -85,7 +85,7 @@ class Robot:
 
         def find_move(robot):
             start = Node.Node(robot.position['x'], robot.position['y'], robot.get_current_cell())
-            goals = find_goals()
+            goals = find_goals(robot)
 
             # Set of all A*'s best paths
             path_set = []
@@ -95,13 +95,13 @@ class Robot:
                 path_set.append(a_star(start, goal))
 
             best_path = []
-            best_g_score = constants.INFINITY
+            best_g_score = 0
             for path in path_set:
                 # Save the best path : the one with the lowest goal's g_score
                 # TODO modifier les constantes pour que le g_score d'un chemin long
                 # avec que des objets tout le long soit meilleur qu'un chemin beaucoup
                 # plus court mais avec qu'un objet
-                if path[-1].g_score < best_g_score:
+                if path[-1].g_score > best_g_score:
                     best_path = path
                     best_g_score = path[-1].g_score
 
@@ -110,12 +110,12 @@ class Robot:
             robot.actions = convert_path_to_move(best_path, best_g_score)
             # self.path.append({'moves': [], 'score': 1})"
 
-        def find_goals():
+        def find_goals(robot):
             """Return every potential goals"""
             # TODO
             goals = []
-            for target in self.targets:
-                goals.append(Node.Node(target[0], target[1], self.mansion.board[target[0]][target[1]]))
+            for target in robot.targets:
+                goals.append(Node.Node(target[1], target[0], robot.mansion.board[target[1]][target[0]]))
             return goals
 
         def convert_path_to_move(path, score):
@@ -140,9 +140,9 @@ class Robot:
                     moves.append(constants.UP)
                 elif (node.x != prev_x) and (node.y != prev_y):
                     return False
-                if self.mansion.board[node.x][node.y] is constants.JEWEL:
+                if self.mansion.board[node.y][node.x] is constants.JEWEL:
                     moves.append(constants.TAKE)
-                elif self.mansion.board[node.x][node.y] is constants.DUST:
+                elif self.mansion.board[node.y][node.x] is constants.DUST:
                     moves.append(constants.CLEAN)
 
             return moves
@@ -216,13 +216,13 @@ class Robot:
             x_max = mansion_dimensions['width']-1
             y_max = mansion_dimensions['height']-1
             if current_x > x_min:
-                neighbors.append(Node.Node(current_x-1, current_y, self.mansion.board[current_x-1][current_y]))
+                neighbors.append(Node.Node(current_x-1, current_y, self.mansion.board[current_y][current_x-1]))
             if current_x < x_max:
-                neighbors.append(Node.Node(current_x+1, current_y, self.mansion.board[current_x+1][current_y]))
+                neighbors.append(Node.Node(current_x+1, current_y, self.mansion.board[current_y][current_x+1]))
             if current_y > y_min:
-                neighbors.append(Node.Node(current_x, current_y-1, self.mansion.board[current_x][current_y-1]))
+                neighbors.append(Node.Node(current_x, current_y-1, self.mansion.board[current_y-1][current_x]))
             if current_y < y_max:
-                neighbors.append(Node.Node(current_x, current_y+1, self.mansion.board[current_x][current_y+1]))
+                neighbors.append(Node.Node(current_x, current_y+1, self.mansion.board[current_y+1][current_x]))
             return neighbors
 
         def best_f_node(node_set):
@@ -320,7 +320,7 @@ class Robot:
             for j in range(len(board[i])):
                 line_text += " "
 
-                if i == self.position['x'] and j == self.position['y']:
+                if i == self.position['y'] and j == self.position['x']:
                     line_text += ":snail:"
                 else:
                     line_text += board[i][j]
