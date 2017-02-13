@@ -114,14 +114,8 @@ class Robot:
             """Return every potential goals"""
             # TODO
             goals = []
-            mansion_dimensions = self.mansion.get_mansion_dimensions()
-            x_size = mansion_dimensions['width']
-            y_size = mansion_dimensions['height']
-            for x in range(0, x_size):
-                for y in range(0, y_size):
-                    if (self.mansion.board[x][y] is constants.DUST) or (self.mansion.board[x][y] is constants.JEWEL):
-                        # TODO ajouter quand y a les deux
-                        goals.append(Node.Node(x, y, self.mansion.board[x][y]))
+            for target in self.targets:
+                goals.append(Node.Node(target[0], target[1], self.mansion.board[target[0]][target[1]]))
             return goals
 
         def convert_path_to_move(path, score):
