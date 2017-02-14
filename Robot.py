@@ -51,7 +51,7 @@ class Robot:
             # Utilities
             self.print_environment()
             self.cycles += 1
-            time.sleep(0.025)
+            time.sleep(0.25)
 
     def look_for_new_targets(self):
         """Capteur"""
@@ -349,5 +349,5 @@ class Robot:
 
             print(emoji.emojize(line_text, use_aliases=True) + '\n')
 
-        print("path : \n")
+        print("Upcoming  moves : \n")
         print(self.actions)
