@@ -13,7 +13,7 @@ CLEAN = 'CLEAN'
 # Object values
 DUST = ':hankey:'
 JEWEL = ':ring:'
-BOTH = ':o:'
+BOTH = ':cookie:'
 EMPTY = '·'
 
 # Weight values

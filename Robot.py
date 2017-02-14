@@ -88,25 +88,21 @@ class Robot:
 
             best_path = []
             g_score = 0
-            max_len = 0
+            max_elements = 0
             for path in path_set:
-                # Save the best path : the one with the lowest goal's g_score
-                # TODO modifier les constantes pour que le g_score d'un chemin long
-                # avec que des objets tout le long soit meilleur qu'un chemin beaucoup
-                # plus court mais avec qu'un objet
-                if (len(path) > max_len) or (len(path) == max_len and path[-1].g_score < g_score):
-                    best_path = path
-                    max_len = len(path)
-                    g_score = path[-1].g_score
+                elements = path[0]
+                move = path[1]
+                # Intelligence is here
+                if ((elements > max_elements) and (len(move) <= robot.available_moves)) \
+                        or ((elements == max_elements) and (len(move) <= robot.available_moves) and (move[-1].g_score < g_score)):
+                    best_path = move
+                    max_elements = elements
+                    g_score = move[-1].g_score
 
-            # TODO savoir sous quel format on retourne le chemin,
-            # l'utilisation de la classe Node n'est probablement pas pertinente en dehors de cette fonction
             return convert_path_to_move(best_path)
-            # self.path.append({'moves': [], 'score': 1})"
 
         def find_goals(robot):
             """Return every potential goals"""
-            # TODO
             goals = []
             for target in robot.targets:
                 goals.append(Node.Node(target[1], target[0], robot.mansion.board[target[1]][target[0]]))
@@ -118,7 +114,6 @@ class Robot:
             prev_x = path[0].x
             prev_y = path[0].y
 
-            # TODO verifier les moves
             for node in path:
                 if (node.x == prev_x + 1) and (node.y == prev_y):
                     prev_x = node.x
@@ -196,11 +191,20 @@ class Robot:
 
         def reconstruct_path(current):
             """Return the path from the start node to the current node"""
+            number_of_elements = 0
+            if current.weight == constants.BOTH_WEIGHT:
+                number_of_elements = 2
+            elif (current.weight == constants.JEWEL_WEIGHT) or (current.weight == constants.DUST_WEIGHT):
+                number_of_elements = 1
             total_path = [current]
             while current.came_from:
                 current = current.came_from
                 total_path = [current] + total_path
-            return total_path
+                if current.weight == constants.BOTH_WEIGHT:
+                    number_of_elements += 2
+                elif (current.weight == constants.JEWEL_WEIGHT) or (current.weight == constants.DUST_WEIGHT):
+                    number_of_elements += 1
+            return [number_of_elements, total_path]
 
         def neighbors_of(current):
             """Return the list of neighbor nodes of the current node"""
@@ -337,7 +341,7 @@ class Robot:
                 line_text += " "
 
                 if i == self.position['y'] and j == self.position['x']:
-                    line_text += ":snail:"
+                    line_text += ":sunglasses:"
                 else:
                     line_text += board[i][j]
 
