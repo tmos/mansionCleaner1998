@@ -13,10 +13,11 @@ The python code is organised in 3 classes :
 2. Mansion.py : the mansion ;
 3. Robot.py : the robot.
 
-😎 : Hal, the cleaner robot
-💩 : A piece of dust
-💍 : A jewel ring
-🍪 : Both a ring and some dust
+
+* 😎 : Hal, the cleaner robot
+* 💩 : A piece of dust
+* 💍 : A jewel ring
+* 🍪 : Both a ring and some dust
 
 ## Installation 
 
