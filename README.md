@@ -9,10 +9,9 @@ Mansion Cleaner 1998 is a script that emulate the behavior of a cleaner robot in
 
 The python code is organised in 3 classes :
 
-1. Game.py : the global controller ;
-2. Mansion.py : the mansion ;
-3. Robot.py : the robot.
-
+1. Game.py : the global controller
+2. Mansion.py : the mansion
+3. Robot.py : the robot
 
 * 😎 : Hal, the cleaner robot
 * 💩 : A piece of dust
