@@ -40,6 +40,5 @@ class Mansion:
                     elif self.board[line][case] is constants.EMPTY:
                         self.board[line][case] = constants.JEWEL
 
-
     def get_mansion_dimensions(self):
         return {'width': len(self.board), 'height': len(self.board[0])}

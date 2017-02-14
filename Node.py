@@ -39,7 +39,6 @@ class Node:
             if cell is constants.BOTH:
                 self.weight = constants.BOTH_WEIGHT
         self.g_score = self.weight
-        # TODO calcul de fscore ?
 
     def equals(self, node):
         return (self.x == node.x) and (self.y == node.y)

@@ -5,6 +5,7 @@ import os
 import constants
 import Node
 
+
 class Robot:
     """
         Heuristically Programmed Algorithmic computer n°9000.
@@ -94,7 +95,8 @@ class Robot:
                 move = path[1]
                 # Intelligence is here
                 if ((elements > max_elements) and (len(move) <= robot.available_moves)) \
-                        or ((elements == max_elements) and (len(move) <= robot.available_moves) and (move[-1].g_score < g_score)):
+                        or ((elements == max_elements) and (len(move) <= robot.available_moves)
+                            and (move[-1].g_score < g_score)):
                     best_path = move
                     max_elements = elements
                     g_score = move[-1].g_score
@@ -244,7 +246,7 @@ class Robot:
         actions = find_move(self)
         if self.score//10 > 0:
             self.available_moves = self.score//10
-        else :
+        else:
             self.available_moves = 3
 
         self.actions = actions[:self.available_moves]
@@ -330,7 +332,8 @@ class Robot:
 
         print(' ' + emoji.emojize(constants.DUST, use_aliases=True) + '  Dust : ' + str(self.cleaned_dust) + '\n')
         print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) + '  Jewels : ' + str(self.stored_jewels) + '\n')
-        print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) + '  Lost jewels : ' + str(self.lost_jewels) + '\n')
+        print(' ' + emoji.emojize(constants.JEWEL, use_aliases=True) +
+              '  Lost jewels : ' + str(self.lost_jewels) + '\n')
         print(' ' + emoji.emojize(':arrows_clockwise:', use_aliases=True) + '  Cycles : ' + str(self.cycles) + '\n')
         print(' ' + emoji.emojize(':heavy_check_mark:', use_aliases=True) + '  Score : ' + str(self.score) + '\n')
         print('  Tours : ' + str(self.current_move) + '/' + str(self.available_moves))
