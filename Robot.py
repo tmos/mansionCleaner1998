@@ -341,7 +341,7 @@ class Robot:
                 line_text += " "
 
                 if i == self.position['y'] and j == self.position['x']:
-                    line_text += ":snail:"
+                    line_text += ":sunglasses:"
                 else:
                     line_text += board[i][j]
 
