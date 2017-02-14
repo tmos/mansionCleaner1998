@@ -41,7 +41,7 @@ def intro():
     os.system('clear')
 
 def main():
-    """intro()"""
+    intro()
     "Create a new game"
     game = Game.Game()
     "Display the mansion"
