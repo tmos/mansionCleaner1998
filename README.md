@@ -1,7 +1,7 @@
 # Mansion Cleaner 1998
 Clean your mansion, seamlessly.
 
-![mansionCleaner1998](https://github.com/tmos/mansionCleaner1998/blob/master/assets/mansion.gif)
+<img src="https://github.com/tmos/mansionCleaner1998/blob/master/assets/mansion.gif" height="400">
 
 ## Introduction
 
