@@ -7,11 +7,11 @@ Clean your mansion, seamlessly.
 
 Mansion Cleaner 1998 is a script that emulate the behavior of a cleaner robot in a big mansion. It uses Artificial Intelligence to be the most effective possible.
 
-The python code is organised in 3 classes :
+The python code is organised in 3 classes:
 
-1. Game.py : the global controller
-2. Mansion.py : the mansion
-3. Robot.py : the robot
+1. `Game.py`: the global controller
+2. `Mansion.py`: the mansion
+3. `Robot.py`: the robot
 
 * 😎 : Hal, the cleaner robot
 * 💩 : A piece of dust
@@ -20,30 +20,30 @@ The python code is organised in 3 classes :
 
 ## Installation 
 
-MC1998 uses Python 3.5. Here is the installation process :
+MC1998 uses Python 3.5. Here is the installation process:
 
-Requirements :
+Requirements:
 * Python 3.5.x
 * Pip
 * UNIX terminal
 
-Check if you have Virtualenv installed :
+Check if you have Virtualenv installed:
 
 `bash$ python -m venv`
 
-If it doesn't work, you have to install Virtualenv :
+If it doesn't work, you have to install Virtualenv:
 
 `$ pip install --user virtualenv`
 
-Once installed, go inside the project folder, and :
+Once installed, go inside the project folder, and:
 
 `$ source bin/activate`
 
-Now, you just have to install the dependencies :
+Now, you just have to install the dependencies:
 
 `$ pip install -r requirements.txt`
 
-And launch the Mansion Cleaner :
+And launch the Mansion Cleaner:
 
 `$ python mansion_cleaner_1998.py`
 
@@ -55,21 +55,21 @@ To explore and plan his actions, the agent starts with scanning his environnemen
 Once the agent have the path list to each target, he will define wich one is the most pertinent at the moment. Basicaly, it will be the one that have the biggest amount of items on its way, the shortest A star score, and that respect the movement limitations of the robot (check out the performance measurements section).
 
 ### Mental state
-L’état mental de l’agent est implémenté dans la fonction live() de Robot.py. Cette fonction est simplement une boucle infinie qui exécute les capteurs et effecteurs de l’agent selon des critères définis. À chaque itération, le fonctionnement de la boucle est le suivant :
+The agent's mental state is implemented into the `live()` function of `Robot.py`. This function is simply an infinite loop which executes the agent's sensors and effectors, according to the defined criteria. At each iteration, the loop works as follows:
 
-1. Le robot vérifie qu’il lui reste des actions prévues (la quantité d’actions prévues est limitée par la mesure de performance, cf le titre suivant).
-2. S’il lui reste des actions prévues, il exécute la première de la pile
-3. Si la liste d’actions est vide :
-   1. Il vérifie que de nouvelles cibles sont apparues, auquel cas :
-      1. Il calcule le meilleur chemin à parcourir
-      2. puis réalise le premier mouvement de ce chemin
+1. The robot checks that there are still scheduled actions (the quantity of scheduled actions is limited by the perform measure, see the following title) ;
+2. If there are still scheduled actions, the robot executes the first action of the pile ;
+3. If the actions list is empty:
+   1. The robot checks that new targets appeared, in which case:
+      1. It calculates the best path to travel ;
+      2. Then it performs the first move of this path.
 
 ### Performance measurements
-Pour améliorer la performance de l’agent, un mesure de performance. En fonction de l’action effectuée par le robot, un bonus/malus permettra de mettre à jour sa performance. Ainsi :
+In order to optimize the agent's performance, a measure is considered. Depending on the action performed by the robot, a bonus/malus will affect its performance. Then:
 
-* À chaque scan de l’environnement, la performance diminue de 2 points ;
-* À chaque déplacement, la performance diminue d’1 point ;
-* À chaque bonne action[2], la performance augmente de 10 points ;
-* À chaque mauvaise action[3], la performance diminue de 100 points.
+* At each environment scan, the performance decreases of 2 points ;
+* At each move, the performance decreases of 1 point ;
+* At each good action[2], the performance increases of 10 points ;
+* At each bad action[3], the performance decreases of 100 points.
 
-La mesure de performance ainsi calculée permet d’influer sur le nombre de mouvements possibles au prochain tour. Le nombre de mouvement est obtenu par la formule `performance/10`
+Thanks to the performance measure, we can act on the number of possible move allowed on the next turn. The number of moves is obtained with the formula `performance/10`
